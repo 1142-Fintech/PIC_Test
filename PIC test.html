@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統一企業集團 - 關係企業導覽入口</title>
+    <style>
+        :root {
+            --primary-color: #E60012; /* 統一經典紅 */
+            --secondary-color: #F8961E; /* 統一經典橘 */
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .category {
+            margin-bottom: 40px;
+        }
+
+        .category-title {
+            font-size: 1.8em;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: bold;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            color: var(--primary-color);
+            border-color: var(--secondary-color);
+        }
+
+        .card span {
+            display: block;
+            font-size: 0.8em;
+            color: #777;
+            font-weight: normal;
+            margin-top: 5px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>統一企業集團 關係企業導覽</h1>
+            <p>快速連結至統一集團旗下各領域官方網站</p>
+        </header>
+
+        <section class="category">
+            <h2 class="category-title">核心食品與製造</h2>
+            <div class="grid">
+                <a href="https://www.uni-president.com.tw/" target="_blank" class="card">統一企業 (母公司)<span>uni-president.com.tw</span></a>
+                <a href="https://www.uni-president.com.cn/" target="_blank" class="card">統一企業中國<span>uni-president.com.cn</span></a>
+                <a href="https://www.ttet.com.tw/" target="_blank" class="card">大統益<span>ttet.com.tw</span></a>
+            </div>
+        </section>
+
+        <section class="category">
+            <h2 class="category-title">零售通路與流通物流</h2>
+            <div class="grid">
+                <a href="https://www.7-11.com.tw/" target="_blank" class="card">統一超商 (7-ELEVEN)<span>7-11.com.tw</span></a>
+                <a href="https://www.cosmed.com.tw/" target="_blank" class="card">康是美 (COSMED)<span>cosmed.com.tw</span></a>
+                <a href="https://www.presicarre.com.tw/" target="_blank" class="card">台灣家樂福 <span>(統一取得全數股權)</span></a>
+                <a href="https://www.books.com.tw/" target="_blank" class="card">博客來<span>books.com.tw</span></a>
+                <a href="https://www.tcat.com.tw/" target="_blank" class="card">黑貓宅急便 (統一速達)<span>tcat.com.tw</span></a>
+            </div>
+        </section>
+
+        <section class="category">
+            <h2 class="category-title">餐飲與生活品牌</h2>
+            <div class="grid">
+                <a href="https://www.starbucks.com.tw/" target="_blank" class="card">星巴克 (悠旅生活)<span>starbucks.com.tw</span></a>
+                <a href="https://www.misterdonut.com.tw/" target="_blank" class="card">Mister Donut (統一多拿滋)<span>misterdonut.com.tw</span></a>
+                <a href="https://www.coldstone.com.tw/" target="_blank" class="card">Cold Stone (酷聖石)<span>coldstone.com.tw</span></a>
+                <a href="https://www.21pec.com/" target="_blank" class="card">21風味館 (21PLUS)<span>21pec.com</span></a>
+            </div>
+        </section>
+
+        <section class="category">
+            <h2 class="category-title">百貨、休閒與運動</h2>
+            <div class="grid">
+                <a href="https://www.dream-mall.com.tw/" target="_blank" class="card">夢時代購物中心<span>dream-mall.com.tw</span></a>
+                <a href="https://www.uni-ustyle.com.tw/" target="_blank" class="card">統一時代百貨<span>uni-ustyle.com.tw</span></a>
+                <a href="https://www.uni-lions.com.tw/" target="_blank" class="card">統一7-ELEVEn獅隊<span>uni-lions.com.tw</span></a>
+                <a href="https://www.uniresort.com.tw/" target="_blank" class="card">統一渡假村<span>uniresort.com.tw</span></a>
+                <a href="https://www.beingsport.com.tw/" target="_blank" class="card">統一佳佳 (BEING sport)<span>beingsport.com.tw</span></a>
+            </div>
+        </section>
+
+        <footer>
+            <p>※ 本網頁為自行整理之導覽入口，所有商標與連結均屬於原公司所有。</p>
+        </footer>
+    </div>
+
+</body>
+</html>
