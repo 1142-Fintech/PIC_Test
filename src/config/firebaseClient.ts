@@ -25,9 +25,7 @@ const TESTING_CLIENT_CONFIG = {
 if (typeof window !== "undefined" && !firebaseClient.apps.length) {
   if (window.location.hostname === "localhost") {
     firebaseClient.initializeApp(TESTING_CLIENT_CONFIG)
-    firebaseClient.auth()
     ;(window as any).firebase = firebaseClient
-    firebaseClient.auth().useEmulator("http://localhost:9099")
   } else {
     firebaseClient.initializeApp(CLIENT_CONFIG)
     firebaseClient

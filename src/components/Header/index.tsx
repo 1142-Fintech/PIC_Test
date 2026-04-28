@@ -1,15 +1,27 @@
-import { useColorModeValue } from "@chakra-ui/react"
+import { Box, useColorModeValue } from "@chakra-ui/react"
 import HeaderContent from "./Content"
 
 function Navbar() {
   const bg = useColorModeValue("whitesmoke", "#202020")
+  const borderColor = useColorModeValue("gray.200", "gray.700")
   return (
-    <header
+    <Box
+      as="header"
       id="navbar"
-      className="fixed border-2 top-0 p-1 z-10 left-0 right-0 max-w-screen-xl"
+      position="fixed"
+      top="0"
+      left="0"
+      right="0"
+      w="full"
+      h="16"
+      zIndex="100"
+      bg={bg}
+      borderBottomWidth="1px"
+      borderBottomColor={borderColor}
+      shadow="sm"
     >
       <HeaderContent />
-    </header>
+    </Box>
   )
 }
 export default Navbar

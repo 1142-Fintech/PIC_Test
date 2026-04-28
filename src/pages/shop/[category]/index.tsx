@@ -1,27 +1,18 @@
 import ProductsList from "@components/common/ProductsList"
-import firebaseAdmin from "@config/firebaseAdmin"
 import { sections } from "@config/site-sections"
+import productData from "@data/products"
 import { capitalizeFirst } from "@utils/capitalizeFirst"
-import "firebase/firestore"
 import { GetStaticPaths, GetStaticProps } from "next"
 
 export const getStaticProps: GetStaticProps = async ({ params }: any) => {
   const collectionTitle = capitalizeFirst(params.category)
+  const data = productData[collectionTitle as keyof typeof productData]
 
-  const db = firebaseAdmin.firestore()
-  const collections = db.collection("collections")
-  const collectionDoc = await collections.doc(collectionTitle).get()
+  if (!data) {
+    return { notFound: true }
+  }
 
-  if (!collectionDoc.exists) {
-    return {
-      notFound: true
-    }
-  }
-  return {
-    props: {
-      data: collectionDoc.data()
-    }
-  }
+  return { props: { data } }
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {

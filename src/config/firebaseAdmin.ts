@@ -1,16 +1,11 @@
 import * as firebaseAdmin from "firebase-admin"
-import firebaseJSON from "../../quikeats-d24d2-5af7b1f0820a.json"
-
-const privateKey = firebaseJSON.private_key
-const clientEmail = firebaseJSON.client_email
-const projectId = firebaseJSON.project_id
 
 if (!firebaseAdmin.apps.length) {
   firebaseAdmin.initializeApp({
     credential: firebaseAdmin.credential.cert({
-      privateKey,
-      clientEmail,
-      projectId
+      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      projectId: process.env.FIREBASE_PROJECT_ID
     }),
     databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL
   })
