@@ -7,7 +7,7 @@ export default function ProductCard({ item }: any) {
   const { dispatch } = useCart()
   const toast = useToast()
 
-  const handleAddItem = (item: CartItem) =>
+  const handleAddItem = (item: any) =>
     dispatch({
       type: "ADD_ITEM",
       payload: {
