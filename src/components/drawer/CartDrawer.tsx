@@ -38,13 +38,13 @@ function CartDrawer() {
   const textColor = useColorModeValue("gray.800", "white")
   const subTextColor = useColorModeValue("gray.500", "gray.400")
 
-  const handleAddItem = (item: CartItem) =>
+  const handleAddItem = (item: any) =>
     dispatch({
       type: "ADD_ITEM",
       payload: { id: item.id, name: item.name, price: item.price, routeName: item.routeName, qty: 1 }
     })
 
-  const handleRemoveItem = (item: CartItem) =>
+  const handleRemoveItem = (item: any) =>
     dispatch({
       type: "REMOVE_ITEM",
       payload: { id: item.id, name: item.name, price: item.price, routeName: item.routeName, qty: -1 }
