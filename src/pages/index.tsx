@@ -1,129 +1,28 @@
 import { getProductImage } from "@data/image-paths"
+import { useCart } from "@hooks/cart/cart"
 import fetchAllProducts from "@utils/getAllProducts"
 import Image from "next/legacy/image"
-import { useRouter } from "next/router"
 import { useState } from "react"
 
 export function getStaticProps() {
   const { products } = fetchAllProducts()
-  if (!products) {
-    return { notFound: true }
-  }
+  if (!products) return { notFound: true }
   return { props: { products } }
 }
 
 export default function IndexPage(props: any) {
-  const router = useRouter()
+  const { state, dispatch } = useCart()
   const [foodType, setFoodType] = useState(Object.keys(props.products)[0] || "Burgers")
 
-  function renderFoodTypesMenu() {
-    return Object.keys(props.products).map((item: string) => {
-      const isActive = foodType === item
-      return (
-        <button
-          key={`fp-menu-${item}`}
-          onClick={() => setFoodType(item)}
-          className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-all duration-200 ${
-            isActive
-              ? "bg-[#00B14F] text-white shadow-sm"
-              : "text-gray-600 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-[#00B14F]"
-          }`}
-        >
-          {item}
-        </button>
-      )
-    })
+  const cartItems = state?.cartItems ?? []
+  const currentItems = props.products[foodType]?.items ?? []
+
+  function addItem(item: any) {
+    dispatch({ type: "ADD_ITEM", payload: { id: item.id, name: item.name, price: item.price, qty: 1 } })
   }
 
-  function renderFoodTypesGrid() {
-    return props.products[foodType].items.map((item: any) => (
-      <a
-        href={`/shop/${props.products[foodType].routeName}`}
-        key={`fp-gallery-image-${item.id}`}
-        className="group flex flex-col bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 dark:border-gray-700"
-      >
-        <div className="relative w-full h-28 overflow-hidden bg-white dark:bg-gray-700">
-          <div className="w-full h-full transform group-hover:scale-105 transition-transform duration-500">
-            <Image
-              priority
-              layout="fill"
-              objectFit="cover"
-              src={getProductImage(item.id)}
-              alt={`${item.name}`}
-            />
-          </div>
-        </div>
-        <div className="p-3 flex flex-col gap-2">
-          <h3 className="font-bold text-gray-800 dark:text-gray-100 text-sm truncate leading-tight">
-            {item.name || "美味餐點"}
-          </h3>
-          <button className="w-full py-1.5 bg-[#00B14F]/10 dark:bg-[#00B14F]/20 hover:bg-[#00B14F] hover:text-white text-[#00B14F] text-xs font-bold rounded-lg transition-colors cursor-pointer">
-            + 加入揪團
-          </button>
-        </div>
-      </a>
-    ))
-  }
-
-  function renderGroupCart() {
-    return (
-      <aside className="sticky top-[76px] w-full lg:w-72 flex-shrink-0 flex flex-col bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 max-h-[calc(100vh-96px)] overflow-hidden">
-
-        {/* 揪團頭部 */}
-        <div className="p-4 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-700/40">
-          <div className="flex justify-between items-start mb-3">
-            <div>
-              <h2 className="text-base font-extrabold text-gray-800 dark:text-white">統資部午餐揪團</h2>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">發起人：顧北辰</p>
-            </div>
-            <span className="bg-green-100 dark:bg-green-900/40 text-[#00B14F] text-xs font-bold px-2 py-1 rounded-md flex-shrink-0">
-              揪團中
-            </span>
-          </div>
-          <button className="w-full py-1.5 border border-gray-200 dark:border-gray-600 border-dashed rounded-lg text-xs font-semibold text-gray-500 dark:text-gray-400 hover:border-[#00B14F] hover:text-[#00B14F] transition-colors flex items-center justify-center gap-1.5">
-            🔗 複製邀請連結
-          </button>
-        </div>
-
-        {/* 團員點餐清單 */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-3">
-          <div className="flex items-start gap-2.5">
-            <div className="w-7 h-7 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-xs flex-shrink-0">維</div>
-            <div className="flex-1 min-w-0">
-              <div className="flex justify-between items-center">
-                <span className="text-xs font-bold text-gray-800 dark:text-gray-100 truncate">你 (發起人)</span>
-                <span className="text-xs font-bold text-gray-800 dark:text-gray-100 ml-2 flex-shrink-0">$120</span>
-              </div>
-              <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 truncate">經典排骨便當 ×1</p>
-            </div>
-          </div>
-          <div className="flex items-start gap-2.5">
-            <div className="w-7 h-7 rounded-full bg-pink-100 dark:bg-pink-900/40 flex items-center justify-center text-pink-600 dark:text-pink-400 font-bold text-xs flex-shrink-0">涵</div>
-            <div className="flex-1 min-w-0">
-              <div className="flex justify-between items-center">
-                <span className="text-xs font-bold text-gray-800 dark:text-gray-100 truncate">柳如煙</span>
-                <span className="text-xs font-bold text-gray-800 dark:text-gray-100 ml-2 flex-shrink-0">$150</span>
-              </div>
-              <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 truncate">健康舒肥雞胸餐 ×1</p>
-            </div>
-          </div>
-        </div>
-
-        {/* 底部結帳 */}
-        <div className="p-4 border-t border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800">
-          <div className="flex justify-between items-center mb-3">
-            <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">目前總金額 (2人)</span>
-            <span className="text-lg font-extrabold text-[#FF6B00]">$270</span>
-          </div>
-          <button
-            className="w-full py-2.5 bg-[#00B14F] hover:bg-green-600 text-white font-bold rounded-xl shadow-sm transition-all hover:-translate-y-0.5 cursor-pointer text-sm"
-            onClick={() => router.push("/checkout")}
-          >
-            進入 AA 結帳與折抵
-          </button>
-        </div>
-      </aside>
-    )
+  function removeItem(item: any) {
+    dispatch({ type: "REMOVE_ITEM", payload: { id: item.id, name: item.name, price: item.price, qty: -1 } })
   }
 
   return (
@@ -146,25 +45,85 @@ export default function IndexPage(props: any) {
           </div>
         </header>
 
-        {/* 核心三欄式版面 */}
-        <article className="flex flex-col lg:flex-row gap-5">
-          {/* 左欄：菜單分類 */}
+        {/* 二欄：分類 + 商品（購物車移至懸浮 Widget） */}
+        <div className="flex flex-col lg:flex-row gap-5">
+
+          {/* 左欄：分類 */}
           <nav className="w-full lg:w-44 flex-shrink-0 flex flex-col gap-1 bg-white dark:bg-gray-800 p-2.5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 h-fit">
             <div className="px-3 py-1.5 text-xs font-black text-gray-400 dark:text-gray-500 tracking-wider">餐點分類</div>
-            {renderFoodTypesMenu()}
+            {Object.keys(props.products).map((cat: string) => (
+              <button
+                key={cat}
+                onClick={() => setFoodType(cat)}
+                className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-all duration-200 ${
+                  foodType === cat
+                    ? "bg-[#00B14F] text-white shadow-sm"
+                    : "text-gray-600 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-[#00B14F]"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
           </nav>
 
-          {/* 中欄：商品網格 */}
+          {/* 右欄：商品格 */}
           <div className="flex-1 min-w-0">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-              {renderFoodTypesGrid()}
+            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+              {currentItems.map((item: any) => {
+                const qty = cartItems.find((i: any) => i.id === item.id)?.qty || 0
+                return (
+                  <div
+                    key={item.id}
+                    className="flex flex-col bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 dark:border-gray-700"
+                  >
+                    {/* 圖片 */}
+                    <div className="relative w-full h-36 bg-white dark:bg-gray-700 overflow-hidden">
+                      <Image layout="fill" objectFit="cover" src={getProductImage(item.id)} alt={item.name} />
+                      <div className="absolute top-2 right-2 bg-[#FF6B00] text-white px-2.5 py-0.5 rounded-lg text-sm font-extrabold shadow">
+                        ${item.price}
+                      </div>
+                      {qty > 0 && (
+                        <div className="absolute top-2 left-2 bg-[#00B14F] text-white px-2 py-0.5 rounded-lg text-xs font-extrabold shadow">
+                          已選 {qty}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 內容 */}
+                    <div className="p-3 flex flex-col gap-2 flex-1">
+                      <p className="font-extrabold text-gray-800 dark:text-gray-100 text-sm leading-snug">{item.name}</p>
+                      {qty > 0 ? (
+                        <div className="mt-auto flex items-center gap-2">
+                          <button
+                            onClick={() => removeItem(item)}
+                            className="w-8 h-8 rounded-full border-2 border-gray-300 dark:border-gray-500 flex items-center justify-center font-bold text-gray-600 dark:text-gray-300 hover:border-red-400 hover:text-red-500 transition-colors"
+                          >
+                            −
+                          </button>
+                          <span className="flex-1 text-center font-extrabold text-gray-800 dark:text-white">{qty}</span>
+                          <button
+                            onClick={() => addItem(item)}
+                            className="w-8 h-8 rounded-full bg-[#00B14F] flex items-center justify-center text-white font-bold hover:bg-green-600 transition-colors"
+                          >
+                            +
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => addItem(item)}
+                          className="mt-auto w-full py-2 bg-[#00B14F]/10 dark:bg-[#00B14F]/20 hover:bg-[#00B14F] hover:text-white text-[#00B14F] text-xs font-bold rounded-xl transition-colors"
+                        >
+                          + 加入購物車
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
 
-          {/* 右欄：黏性購物車 */}
-          {renderGroupCart()}
-        </article>
-
+        </div>
       </div>
     </div>
   )

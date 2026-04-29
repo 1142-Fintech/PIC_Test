@@ -1,5 +1,6 @@
 import { ChakraProvider, useColorMode } from "@chakra-ui/react"
 import Navbar from "@components/Header"
+import GroupCartWidget from "@components/common/GroupCartWidget"
 import { AuthProvider } from "@hooks/auth"
 import { CartProvider } from "@hooks/cart/cart"
 import type { AppProps } from "next/app"
@@ -37,6 +38,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <main className="w-full pt-16">
               <Component {...pageProps} />
             </main>
+            <GroupCartWidget />
           </CartProvider>
         </ChakraProvider>
       </AuthProvider>

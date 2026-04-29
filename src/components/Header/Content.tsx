@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   chakra,
   Flex,
   HStack,
@@ -8,27 +7,17 @@ import {
   IconButton,
   LinkBox,
   LinkOverlay,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuGroup,
-  MenuItem,
-  MenuList,
   Spacer,
   Stack,
   useColorMode,
   useColorModeValue,
-  useToast
 } from "@chakra-ui/react"
-import CartDrawer from "@components/drawer/CartDrawer"
-import LoginDrawer from "@components/drawer/LoginDrawer"
-import RegisterDrawer from "@components/drawer/RegisterDrawer"
 import firebaseClient from "@config/firebaseClient"
 import { useAuth } from "@hooks/auth"
 import router from "next/router"
-import { FaMoon, FaSun, FaUserCircle } from "react-icons/fa"
+import { useEffect, useRef, useState } from "react"
+import { FaMoon, FaSun } from "react-icons/fa"
 import { GiFireDash } from "react-icons/gi"
-import { MdSettings } from "react-icons/md"
 
 export const sections = [
   { id: "home-link", title: "home", href: "/" },
@@ -68,61 +57,64 @@ const NavbarLogoSection = () => (
 )
 
 export default function NavbarContent() {
-  const bg = useColorModeValue("whitesmoke", "#202020")
   const { user } = useAuth()
-  const toast = useToast()
   const { toggleColorMode: toggleMode } = useColorMode()
   const SwitchIcon = useColorModeValue(FaMoon, FaSun)
   const text = useColorModeValue("dark", "light")
 
   function UserMenu() {
+    const [open, setOpen] = useState(false)
+    const ref = useRef<HTMLDivElement>(null)
+    const name = user?.displayName || user?.email?.split("@")[0] || "U"
+    const initial = name[0].toUpperCase()
+
+    useEffect(() => {
+      function handleClick(e: MouseEvent) {
+        if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+      }
+      document.addEventListener("mousedown", handleClick)
+      return () => document.removeEventListener("mousedown", handleClick)
+    }, [])
+
     return (
-      <Menu>
-        <MenuButton as={Button}>{user?.email}</MenuButton>
-        <MenuList opacity="0.7" bg={bg}>
-          <MenuGroup title="user">
-            <MenuDivider />
-            <MenuItem onClick={() => router.push("/user/profile")}>
-              <FaUserCircle />
-              <Box ml={3}>Profile</Box>
-            </MenuItem>
-            <MenuItem onClick={() => router.push("/user/account")}>
-              <MdSettings />
-              <Box ml={3}>Account</Box>
-            </MenuItem>
-          </MenuGroup>
-          <MenuDivider />
-          <MenuGroup>
-            <MenuItem
-              mr={2}
-              onClick={async () => {
-                try {
-                  await firebaseClient.auth().signOut()
-                  toast({
-                    id: "success-signing-out",
-                    title: `Congrats`,
-                    description: "You were signed out successfully.",
-                    status: "success",
-                    duration: 2000,
-                    isClosable: true
-                  })
-                } catch (error: any) {
-                  toast({
-                    id: "warning-cannot-sign-out",
-                    title: `hmmmmm`,
-                    description: `${error.message}`,
-                    status: "warning",
-                    duration: 3000,
-                    isClosable: true
-                  })
-                }
-              }}
+      <div ref={ref} className="relative">
+        <button
+          onClick={() => setOpen(p => !p)}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+        >
+          <div className="w-8 h-8 rounded-full bg-[#00B14F] flex items-center justify-center text-white font-extrabold text-sm flex-shrink-0">
+            {initial}
+          </div>
+          <span className="text-sm font-semibold text-gray-700 dark:text-gray-200 hidden sm:block max-w-[120px] truncate">
+            {name}
+          </span>
+          <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        {open && (
+          <div className="absolute right-0 top-full mt-2 w-52 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 py-1 z-[200]">
+            <div className="px-4 py-2.5 border-b border-gray-100 dark:border-gray-700">
+              <p className="text-xs font-bold text-gray-500 dark:text-gray-400 truncate">{user?.email}</p>
+            </div>
+            <button
+              onClick={() => { router.push("/user/history"); setOpen(false) }}
+              className="w-full text-left px-4 py-2.5 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center gap-2"
             >
-              <Box ml={3}>Logout</Box>
-            </MenuItem>
-          </MenuGroup>
-        </MenuList>
-      </Menu>
+              📋 歷史訂單
+            </button>
+            <div className="border-t border-gray-100 dark:border-gray-700 mt-1 pt-1">
+              <button
+                onClick={async () => { await firebaseClient.auth().signOut(); setOpen(false) }}
+                className="w-full text-left px-4 py-2.5 text-sm font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+              >
+                登出
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     )
   }
 
@@ -138,10 +130,20 @@ export default function NavbarContent() {
         {user && user.email ? (
           <UserMenu />
         ) : (
-          <>
-            <RegisterDrawer />
-            <LoginDrawer />
-          </>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => router.push("/user/register")}
+              className="px-4 py-2 text-sm font-bold border border-gray-200 dark:border-gray-600 rounded-xl text-gray-700 dark:text-gray-200 hover:border-[#00B14F] hover:text-[#00B14F] transition-colors bg-transparent"
+            >
+              註冊
+            </button>
+            <button
+              onClick={() => router.push("/user/login")}
+              className="px-4 py-2 text-sm font-bold bg-[#00B14F] text-white rounded-xl hover:bg-green-600 transition-colors"
+            >
+              登入
+            </button>
+          </div>
         )}
       </Stack>
     )
@@ -159,7 +161,6 @@ export default function NavbarContent() {
       <NavbarLogoSection />
       <Spacer />
       <NavBarUserSection />
-      <CartDrawer />
       <IconButton
         size="md"
         fontSize="lg"
