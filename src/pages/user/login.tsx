@@ -49,7 +49,7 @@ export default function LoginPage() {
             <span className="text-gray-800 dark:text-gray-100"> 校園版</span>
           </h1>
           <p className="text-gray-500 dark:text-gray-400 text-sm mt-2">
-            {redirect !== "/" ? "登入後加入揪團" : "登入你的帳號"}
+            {redirect.includes("group") ? "登入後加入揪團" : redirect !== "/" ? "登入後繼續結帳" : "登入你的帳號"}
           </p>
         </div>
 

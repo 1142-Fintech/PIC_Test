@@ -179,16 +179,22 @@ export default function GroupPage() {
               發起人：{group?.organizer.name}
             </p>
           </div>
-          <button
-            onClick={copyLink}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all border ${
-              copied
-                ? "bg-green-50 dark:bg-green-900/20 border-green-300 text-green-600"
-                : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:border-[#00B14F] hover:text-[#00B14F]"
-            }`}
-          >
-            {copied ? "✓ 已複製！" : "🔗 複製邀請連結"}
-          </button>
+          {user?.uid === group?.organizer.uid ? (
+            <button
+              onClick={copyLink}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all border ${
+                copied
+                  ? "bg-green-50 dark:bg-green-900/20 border-green-300 text-green-600"
+                  : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:border-[#00B14F] hover:text-[#00B14F]"
+              }`}
+            >
+              {copied ? "✓ 已複製！" : "🔗 複製邀請連結"}
+            </button>
+          ) : (
+            <span className="px-4 py-2.5 rounded-xl text-sm font-bold bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
+              參與中
+            </span>
+          )}
         </header>
 
         {/* 二欄：分類 + 商品（購物車移至懸浮 Widget） */}

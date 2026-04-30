@@ -16,6 +16,7 @@ export default function GroupCartWidget() {
 
   const groupId = router.query.groupId as string | undefined
   const isGroupPage = router.pathname === "/group/[groupId]" && !!groupId
+  const isCheckoutPage = router.pathname === "/checkout"
 
   useEffect(() => setMounted(true), [])
 
@@ -57,7 +58,7 @@ export default function GroupCartWidget() {
   const handleAdd = (item: any) => dispatch({ type: "ADD_ITEM", payload: { ...item, qty: 1 } })
   const handleRemove = (item: any) => dispatch({ type: "REMOVE_ITEM", payload: { ...item, qty: -1 } })
 
-  if (!mounted) return null
+  if (!mounted || isCheckoutPage) return null
 
   const grandTotal = memberList.reduce((s, [, m]) => s + m.items.reduce((ss, i) => ss + i.price * i.qty, 0), 0)
   const localTotal = cartItems.reduce((s, i) => s + i.price * i.qty, 0)
@@ -100,12 +101,14 @@ export default function GroupCartWidget() {
                     <button onClick={() => setIsExpanded(false)} className="w-7 h-7 flex items-center justify-center text-gray-400 hover:text-gray-700 text-xl font-bold rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">×</button>
                   </div>
                 </div>
-                <button
-                  onClick={() => { navigator.clipboard.writeText(`${window.location.origin}/group/${groupId}`); setNotice("已複製！"); setTimeout(() => setNotice(null), 2000) }}
-                  className="w-full py-1.5 border border-dashed border-gray-200 dark:border-gray-600 rounded-lg text-xs font-semibold text-gray-500 hover:border-[#00B14F] hover:text-[#00B14F] transition-colors flex items-center justify-center gap-1.5"
-                >
-                  {notice || "🔗 複製邀請連結"}
-                </button>
+                {user?.uid === group?.organizer.uid && (
+                  <button
+                    onClick={() => { navigator.clipboard.writeText(`${window.location.origin}/group/${groupId}`); setNotice("已複製！"); setTimeout(() => setNotice(null), 2000) }}
+                    className="w-full py-1.5 border border-dashed border-gray-200 dark:border-gray-600 rounded-lg text-xs font-semibold text-gray-500 hover:border-[#00B14F] hover:text-[#00B14F] transition-colors flex items-center justify-center gap-1.5"
+                  >
+                    {notice || "🔗 複製邀請連結"}
+                  </button>
+                )}
               </div>
             ) : (
               /* ── 個人模式頭部 ── */
@@ -193,7 +196,14 @@ export default function GroupCartWidget() {
                   </div>
                   <button
                     disabled={groupBadge === 0}
-                    onClick={() => router.push(`/checkout?groupId=${groupId}`)}
+                    onClick={() => {
+                      if (!user) {
+                        router.push(`/user/login?redirect=${encodeURIComponent(`/checkout?groupId=${groupId}`)}`)
+                        setIsExpanded(false)
+                        return
+                      }
+                      router.push(`/checkout?groupId=${groupId}`)
+                    }}
                     className="w-full py-2.5 bg-[#00B14F] hover:bg-green-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl text-sm transition-all hover:-translate-y-0.5 shadow-sm"
                   >
                     進入結帳
@@ -207,7 +217,14 @@ export default function GroupCartWidget() {
                   </div>
                   <button
                     disabled={cartItems.length === 0}
-                    onClick={() => router.push("/checkout")}
+                    onClick={() => {
+                      if (!user) {
+                        router.push("/user/login?redirect=/checkout")
+                        setIsExpanded(false)
+                        return
+                      }
+                      router.push("/checkout")
+                    }}
                     className="w-full py-2.5 bg-[#00B14F] hover:bg-green-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl text-sm transition-all hover:-translate-y-0.5 shadow-sm"
                   >
                     個人結帳

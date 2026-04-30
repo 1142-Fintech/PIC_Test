@@ -1,9 +1,5 @@
 import {
-  Box,
-  chakra,
   Flex,
-  HStack,
-  Icon,
   IconButton,
   LinkBox,
   LinkOverlay,
@@ -17,40 +13,18 @@ import { useAuth } from "@hooks/auth"
 import router from "next/router"
 import { useEffect, useRef, useState } from "react"
 import { FaMoon, FaSun } from "react-icons/fa"
-import { GiFireDash } from "react-icons/gi"
-
-export const sections = [
-  { id: "home-link", title: "home", href: "/" },
-  { id: "burgers-link", title: "Burgers", href: "/shop/burgers" },
-  { id: "chicken-link", title: "Chicken", href: "/shop/chicken" },
-  { id: "pizza-link", title: "Pizza", href: "/shop/pizza" },
-  { id: "shop-link", title: "shop", href: "/shop/" },
-  { id: "sushi-link", title: "Sushi", href: "/shop/sushi" },
-  { id: "sandwiches-link", title: "Sandwiches", href: "/shop/sandwiches" }
-]
 
 const NavbarLogoSection = () => (
   <div className="container px-2">
     <LinkBox
       data-testid="nav-logo"
-      textDecoration="mediumslateblue"
-      fontSize={{ base: "md", md: "large", lg: "2xl" }}
-      letterSpacing="wide"
-      fontWeight="bold"
-      fontFamily="Anton"
-      color="yellow.400"
       aria-label="Home Page Link"
     >
       <LinkOverlay href="/">
-        <HStack>
-          <Icon as={GiFireDash} boxSize="1.8em" />
-          <Box>
-            <chakra.span fontStyle="italic" color="mediumorchid">
-              QUICK
-            </chakra.span>
-            EATS
-          </Box>
-        </HStack>
+        <span className="text-xl font-extrabold tracking-tight flex items-center gap-1">
+          <span className="text-[#00B14F]">Foodomo</span>
+          <span className="text-gray-700 dark:text-gray-200">校園強化版</span>
+        </span>
       </LinkOverlay>
     </LinkBox>
   </div>

@@ -2,12 +2,14 @@ import firebaseClient from "@config/firebaseClient"
 import nookies from "nookies"
 import { createContext, useContext, useEffect, useState } from "react"
 
-const AuthContext = createContext<{ user: firebaseClient.User | null }>({
-  user: null
+const AuthContext = createContext<{ user: firebaseClient.User | null; authReady: boolean }>({
+  user: null,
+  authReady: false,
 })
 
 export function AuthProvider({ children }: any) {
   const [user, setUser] = useState<firebaseClient.User | null>(null)
+  const [authReady, setAuthReady] = useState(false)
 
   useEffect(() => {
     if (typeof window !== undefined) {
@@ -16,6 +18,7 @@ export function AuthProvider({ children }: any) {
     return firebaseClient.auth().onIdTokenChanged(async authUser => {
       if (!authUser) {
         setUser(null)
+        setAuthReady(true)
         nookies.destroy(null, "token")
         nookies.set(null, "token", "", {})
         return
@@ -23,6 +26,7 @@ export function AuthProvider({ children }: any) {
 
       const token = await authUser.getIdToken()
       setUser(authUser)
+      setAuthReady(true)
       nookies.destroy(null, "token")
       nookies.set(null, "token", token, {})
     })
@@ -37,7 +41,7 @@ export function AuthProvider({ children }: any) {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, authReady }}>{children}</AuthContext.Provider>
   )
 }
 

@@ -126,6 +126,25 @@ export async function saveOrderHistory(group: GroupOrder, groupId: string): Prom
   )
 }
 
+export async function saveIndividualOrder(
+  user: any,
+  cartItems: Array<{ id: number; name: string; price: number; qty: number }>,
+  finalTotal: number
+): Promise<void> {
+  const db = firebaseClient.database()
+  const name = getMemberName(user)
+  await db.ref(`userOrders/${user.uid}`).push({
+    groupId: "",
+    title: "個人訂單",
+    organizerName: name,
+    myItems: cartItems.length > 0 ? cartItems.map(i => ({ id: i.id, name: i.name, price: i.price, qty: i.qty })) : null,
+    myTotal: finalTotal,
+    grandTotal: finalTotal,
+    memberCount: 1,
+    closedAt: Date.now(),
+  })
+}
+
 export function subscribeToUserOrders(
   uid: string,
   onData: (orders: OrderRecord[]) => void

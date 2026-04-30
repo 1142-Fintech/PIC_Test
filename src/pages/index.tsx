@@ -12,7 +12,7 @@ export function getStaticProps() {
 
 export default function IndexPage(props: any) {
   const { state, dispatch } = useCart()
-  const [foodType, setFoodType] = useState(Object.keys(props.products)[0] || "Burgers")
+  const [foodType, setFoodType] = useState(Object.keys(props.products)[0] || "21世紀")
 
   const cartItems = state?.cartItems ?? []
   const currentItems = props.products[foodType]?.items ?? []
@@ -28,22 +28,6 @@ export default function IndexPage(props: any) {
   return (
     <div className="min-h-screen bg-[#F7F7F7] dark:bg-[#1A1A1B] py-5 px-4 sm:px-6 lg:px-8">
       <div className="max-w-[1400px] mx-auto">
-
-        {/* 頂部 Header */}
-        <header className="mb-6 flex justify-between items-end">
-          <div>
-            <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
-              <span className="text-[#00B14F]">Foodomo</span>
-              <span className="text-gray-800 dark:text-gray-200">校園強化版</span>
-            </h1>
-            <p className="mt-0.5 text-xs font-medium text-gray-500 dark:text-gray-400">
-              專為校園與辦公室設計的無痛揪團系統
-            </p>
-          </div>
-          <div className="text-xs font-bold text-gray-400 dark:text-gray-500">
-            Powered by 統一資訊
-          </div>
-        </header>
 
         {/* 二欄：分類 + 商品（購物車移至懸浮 Widget） */}
         <div className="flex flex-col lg:flex-row gap-5">
@@ -77,8 +61,10 @@ export default function IndexPage(props: any) {
                     className="flex flex-col bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 dark:border-gray-700"
                   >
                     {/* 圖片 */}
-                    <div className="relative w-full h-36 bg-white dark:bg-gray-700 overflow-hidden">
-                      <Image layout="fill" objectFit="cover" src={getProductImage(item.id)} alt={item.name} />
+                    <div className="relative w-full h-36 bg-white dark:bg-gray-800 overflow-hidden">
+                      <div className="absolute inset-2">
+                        <Image layout="fill" objectFit="contain" src={getProductImage(item.id)} alt={item.name} />
+                      </div>
                       <div className="absolute top-2 right-2 bg-[#FF6B00] text-white px-2.5 py-0.5 rounded-lg text-sm font-extrabold shadow">
                         ${item.price}
                       </div>

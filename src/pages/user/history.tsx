@@ -74,10 +74,10 @@ export default function HistoryPage() {
 
                   {/* 餐點明細 */}
                   <div className="px-5 py-3 space-y-1.5">
-                    {order.myItems.length === 0 ? (
+                    {(order.myItems ?? []).length === 0 ? (
                       <p className="text-sm text-gray-400 dark:text-gray-500">未點餐</p>
                     ) : (
-                      order.myItems.map((item, i) => (
+                      (order.myItems ?? []).map((item, i) => (
                         <div key={i} className="flex justify-between text-sm">
                           <span className="text-gray-600 dark:text-gray-300">
                             {item.name} <span className="text-gray-400">× {item.qty}</span>

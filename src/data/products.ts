@@ -1,72 +1,72 @@
 const productData = {
-  Burgers: {
+  "星巴克": {
     id: 1,
-    routeName: "burgers",
+    routeName: "星巴克",
+    title: "星巴克",
     items: [
-      { price: 14, id: 2, name: "Burger and Coleslaw" },
-      { name: "Tomato and Cheese", price: 16, id: 3 },
-      { id: 4, name: "Deluxe, Bacon and Cheese", price: 18 },
-      { price: 25, name: "Super Double Burger Surprise", id: 5 },
-      { name: "Yum Yum Burger", price: 14, id: 6 },
-      { id: 7, name: "Burger King Clone", price: 14 },
-      { name: "Basic Burger", price: 9, id: 8 },
-      { name: "Cheezy", price: 17, id: 9 }
-    ],
-    title: "Burgers"
-  },
-  Chicken: {
-    id: 4,
-    routeName: "chicken",
-    title: "Chicken",
-    items: [
-      { name: "Chicken and Rice", price: 25, id: 23 },
-      { price: 20, id: 24, name: "Fried Chicken" },
-      { id: 25, name: "Chicken on a Plate", price: 18 },
-      { price: 20, name: "BBQ and Sauce", id: 26 },
-      { id: 27, name: "Chicken `N Shrimp", price: 45 },
-      { price: 15, name: "Chicken Leg and Veggies", id: 28 },
-      { id: 29, name: "Fried Chicken Sandwich", price: 16 }
+      { id: 2, name: "冰搖檸檬果茶", price: 130 },
+      { id: 3, name: "起司里肌可頌", price: 90 },
+      { id: 4, name: "阿里山蜜柚烏龍青茶", price: 170 },
+      { id: 5, name: "焗烤法式里肌三明治", price: 125 },
+      { id: 6, name: "舒肥雞肉蔬菜盅", price: 175 },
+      { id: 7, name: "櫻桃黑森林蛋糕", price: 130 },
+      { id: 8, name: "美式咖啡", price: 115 },
+      { id: 9, name: "香檸紅心芭樂戚風蛋糕", price: 150 }
     ]
   },
-  Pizza: {
-    routeName: "pizza",
+  "21世紀": {
+    id: 4,
+    routeName: "21世紀",
+    title: "21世紀",
     items: [
-      { id: 10, name: "Veggie", price: 17 },
-      { name: "Baked Italian", id: 11, price: 17 },
-      { name: "Tomato Classic", id: 12, price: 15 },
-      { price: 12, id: 13, name: "Pepperoni" },
-      { id: 14, price: 3, name: "Single Slice" },
-      { price: 16, name: "XX Special Pepperoni", id: 15 },
-      { id: 16, price: 17, name: "Italian Super Pepperoni" },
-      { name: "Cheese", id: 17, price: 14 }
-    ],
-    title: "Pizza",
-    id: 2
+      { id: 23, name: "烤腿泡麵小薯", price: 159 },
+      { id: 24, name: "21香草烤半雞餐", price: 265 },
+      { id: 25, name: "烤腿炊粉餐", price: 199 },
+      { id: 26, name: "炸烤分享餐", price: 449 },
+      { id: 27, name: "西西里雞肉披薩(8吋)", price: 149 },
+      { id: 28, name: "番茄雞肉醬時蔬飯", price: 109 },
+      { id: 29, name: "椒麻炸雞雙享桶", price: 339 }
+    ]
   },
-  Sandwiches: {
+  "COLDSTONE": {
+    id: 2,
+    routeName: "COLDSTONE",
+    title: "COLDSTONE",
     items: [
-      { name: "White Cream on White", price: 12, id: 30 },
-      { price: 9, id: 31, name: "Whole Wheat and Turkey" },
-      { id: 32, price: 10, name: "Vegetale-Meat" },
-      { price: 8, id: 33, name: "Vegetable" },
-      { name: "Tomato and Special Sauce Bagel", id: 34, price: 12 },
-      { name: "Avacado and Egg Salad", id: 35, price: 16 }
-    ],
-    routeName: "sandwiches",
+      { id: 10, name: "戀戀長崎蛋糕", price: 170 },
+      { id: 11, name: "巧克莓好", price: 275 },
+      { id: 12, name: "珍愛阿薩姆", price: 140 },
+      { id: 13, name: "就愛Kuromi(5吋)", price: 1680 },
+      { id: 14, name: "宇治莓好", price: 190 },
+      { id: 15, name: "吉伊卡哇冰淇淋蛋糕(5吋)", price: 1680 },
+      { id: 16, name: "餅乾薄荷人", price: 280 },
+      { id: 17, name: "珍藏鐵觀音", price: 190 }
+    ]
+  },
+  "Semeur聖娜": {
     id: 5,
-    title: "Sandwiches"
-  },
-  Sushi: {
-    id: 3,
-    title: "Sushi",
+    routeName: "Semeur聖娜",
+    title: "Semeur聖娜",
     items: [
-      { id: 18, price: 8, name: "Salmon Sashimi" },
-      { id: 19, price: 5, name: "California Roll" },
-      { price: 7, id: 20, name: "Cooked Ramen" },
-      { price: 7, name: "Avocado Roll", id: 21 },
-      { name: "Red Dragon Roll", id: 22, price: 18 }
-    ],
-    routeName: "sushi"
+      { id: 30, name: "香蒜熱狗", price: 55 },
+      { id: 31, name: "火腿起司捲餡土司", price: 95 },
+      { id: 32, name: "金塊香蒜", price: 42 },
+      { id: 33, name: "火腿鮪魚可頌", price: 59 },
+      { id: 34, name: "大理石麵包", price: 65 },
+      { id: 35, name: "脆脆烤年糕(4入)", price: 95 }
+    ]
+  },
+  "Mister Donut": {
+    id: 3,
+    routeName: "Mister Donut",
+    title: "Mister Donut",
+    items: [
+      { id: 18, name: "蜜糖波堤", price: 42 },
+      { id: 19, name: "餅乾可可波堤", price: 48 },
+      { id: 20, name: "萌萌企鵝與兔兔", price: 69 },
+      { id: 21, name: "迷你小球", price: 75 },
+      { id: 22, name: "花樣甜心", price: 65 }
+    ]
   }
 }
 

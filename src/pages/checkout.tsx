@@ -1,14 +1,15 @@
 import { useAuth } from "@hooks/auth"
 import { useCart } from "@hooks/cart/cart"
-import { AVATAR_COLORS, GroupOrder, closeGroup, saveOrderHistory, subscribeToGroup, updatePaymentStatus } from "@utils/groupOrders"
+import { AVATAR_COLORS, GroupOrder, closeGroup, saveIndividualOrder, saveOrderHistory, subscribeToGroup, updatePaymentStatus } from "@utils/groupOrders"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 
 // ── 個人結帳（無 groupId）──────────────────────────────────
 function IndividualCheckout() {
   const router = useRouter()
-  const { state } = useCart()
-  const [paid, setPaid] = useState(false)
+  const { user } = useAuth()
+  const { state, dispatch } = useCart()
+  const [paying, setPaying] = useState(false)
   const [pointsUsed, setPointsUsed] = useState(false)
   const AVAILABLE_POINTS = 320
 
@@ -16,6 +17,20 @@ function IndividualCheckout() {
   const myTotal = cartItems.reduce((s, i) => s + i.price * i.qty, 0)
   const discount = pointsUsed ? Math.min(AVAILABLE_POINTS, myTotal) : 0
   const finalTotal = Math.max(0, myTotal - discount)
+
+  async function handlePay() {
+    if (paying) return
+    setPaying(true)
+    try {
+      if (user) {
+        await saveIndividualOrder(user, cartItems, finalTotal)
+      }
+      dispatch({ type: "CLEAR_CART" })
+      router.replace("/")
+    } catch {
+      setPaying(false)
+    }
+  }
 
   if (cartItems.length === 0) {
     return (
@@ -70,10 +85,11 @@ function IndividualCheckout() {
         </div>
 
         <button
-          onClick={() => setPaid(p => !p)}
-          className={`w-full py-4 font-extrabold rounded-2xl transition-all text-base ${paid ? "bg-[#00B14F] text-white" : "bg-gray-100 dark:bg-gray-700 text-gray-400"}`}
+          onClick={handlePay}
+          disabled={paying}
+          className="w-full py-4 font-extrabold rounded-2xl transition-all text-base bg-[#00B14F] hover:bg-green-600 text-white disabled:opacity-60"
         >
-          {paid ? "✓ 已付款 完成結帳 🎉" : "確認付款"}
+          {paying ? "處理中…" : "確認付款"}
         </button>
       </div>
     </div>
@@ -152,7 +168,7 @@ function GroupCheckout({ groupId }: { groupId: string }) {
       {redirecting && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50">
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center shadow-2xl">
-            <p className="text-5xl mb-3">🎉</p>
+            <p className="text-5xl mb-3"></p>
             <p className="font-extrabold text-gray-800 dark:text-white text-xl mb-1">揪團已結束！</p>
             <p className="text-sm text-gray-500 dark:text-gray-400">購物車已清空，正在返回首頁…</p>
           </div>
@@ -295,7 +311,7 @@ function GroupCheckout({ groupId }: { groupId: string }) {
                   : "bg-gray-100 dark:bg-gray-700 text-gray-400 cursor-not-allowed"
               }`}
             >
-              {closing ? "處理中…" : allPaid ? "確認全員到齊，結束揪團 🎉" : `等待 ${nonOrganizerList.length - paidCount} 人確認轉帳`}
+              {closing ? "處理中…" : allPaid ? "確認全員到齊，結束揪團！" : `等待 ${nonOrganizerList.length - paidCount} 人確認轉帳`}
             </button>
           ) : (
             // 非發起人看等待狀態
@@ -318,11 +334,34 @@ function GroupCheckout({ groupId }: { groupId: string }) {
 // ── 主元件：根據 query 切換模式 ──────────────────────────
 export default function CheckoutPage() {
   const router = useRouter()
+  const { user, authReady } = useAuth()
   const { groupId } = router.query
   const [ready, setReady] = useState(false)
 
   useEffect(() => setReady(true), [])
-  if (!ready) return null
+  if (!ready || !authReady) return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="w-10 h-10 border-4 border-[#00B14F] border-t-transparent rounded-full animate-spin" />
+    </div>
+  )
+
+  if (!user) {
+    const redirect = groupId ? `/checkout?groupId=${groupId}` : "/checkout"
+    return (
+      <div className="min-h-screen bg-[#F7F7F7] dark:bg-[#1A1A1B] flex items-center justify-center">
+        <div className="text-center space-y-3">
+          <p className="text-5xl">🔒</p>
+          <p className="font-extrabold text-gray-700 dark:text-gray-200 text-lg">請先登入才能結帳</p>
+          <button
+            onClick={() => router.push(`/user/login?redirect=${encodeURIComponent(redirect)}`)}
+            className="px-6 py-2 bg-[#00B14F] text-white font-bold rounded-xl text-sm hover:bg-green-600 transition-colors"
+          >
+            前往登入
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   if (groupId && typeof groupId === "string") {
     return <GroupCheckout groupId={groupId} />
