@@ -1,6 +1,7 @@
 import { getProductImage } from "@data/image-paths"
 import { useCart } from "@hooks/cart/cart"
 import fetchAllProducts from "@utils/getAllProducts"
+import Head from "next/head"
 import Image from "next/legacy/image"
 import { useState } from "react"
 
@@ -26,6 +27,14 @@ export default function IndexPage(props: any) {
   }
 
   return (
+    <>
+    <Head>
+      <title>Foodomo 校園強化版</title>
+      <meta name="description" content="專為校園與辦公室設計的無痛揪團系統" />
+      <meta property="og:title" content="Foodomo 校園強化版" />
+      <meta property="og:description" content="專為校園與辦公室設計的無痛揪團系統" />
+      <meta property="og:type" content="website" />
+    </Head>
     <div className="min-h-screen bg-[#F7F7F7] dark:bg-[#1A1A1B] py-5 px-4 sm:px-6 lg:px-8">
       <div className="max-w-[1400px] mx-auto">
 
@@ -112,5 +121,6 @@ export default function IndexPage(props: any) {
         </div>
       </div>
     </div>
+    </>
   )
 }
