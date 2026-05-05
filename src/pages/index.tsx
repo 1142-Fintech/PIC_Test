@@ -1,6 +1,7 @@
 import { getProductImage } from "@data/image-paths"
 import { useCart } from "@hooks/cart/cart"
 import fetchAllProducts from "@utils/getAllProducts"
+import ZiweiCard from "@components/common/ZiweiCard"
 import Head from "next/head"
 import Image from "next/legacy/image"
 import { useState } from "react"
@@ -9,6 +10,13 @@ export function getStaticProps() {
   const { products } = fetchAllProducts()
   if (!products) return { notFound: true }
   return { props: { products } }
+}
+
+function calcExercise(cal: number) {
+  return {
+    jogging: Math.round(cal * 30 / 250),
+    swimming: Math.round(cal * 30 / 254),
+  }
 }
 
 export default function IndexPage(props: any) {
@@ -87,6 +95,16 @@ export default function IndexPage(props: any) {
                     {/* 內容 */}
                     <div className="p-3 flex flex-col gap-2 flex-1">
                       <p className="font-extrabold text-gray-800 dark:text-gray-100 text-sm leading-snug">{item.name}</p>
+                      {item.cal != null && (() => {
+                        const { jogging, swimming } = calcExercise(item.cal)
+                        return (
+                          <div className="flex flex-col gap-0.5">
+                            <span className="text-xs text-orange-500 font-bold"> {item.cal} 大卡</span>
+                            <span className="text-xs text-gray-400 dark:text-gray-500"> 慢跑 {jogging} 分鐘</span>
+                            <span className="text-xs text-gray-400 dark:text-gray-500"> 游泳 {swimming} 分鐘</span>
+                          </div>
+                        )
+                      })()}
                       {qty > 0 ? (
                         <div className="mt-auto flex items-center gap-2">
                           <button
@@ -121,6 +139,9 @@ export default function IndexPage(props: any) {
         </div>
       </div>
     </div>
+
+    {/* 今日紫微運勢懸浮按鈕（fixed，不影響版面） */}
+    <ZiweiCard />
     </>
   )
 }
